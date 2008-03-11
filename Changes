@@ -1,0 +1,40 @@
+Revision history for CatalystX-CRUD-Model-RDBO
+
+0.01    20 Oct 2007
+        First version, released on an unsuspecting world.
+
+0.02    23 Oct 2007
+        * fix typo in POD that fooled CPAN into forking separate doc file
+        * added Sort::SQL to prereq list
+
+0.03    23 Oct 2007
+        * added Rose::DBx::TestDB to the prereq list
+
+0.04    1 November 2007
+        * RDBO Debug var set if CATALYST_DEBUG env var is true
+        * test for defined() param() values
+        * change reserved param names to start with _
+        * fix search() wantarray bug
+
+0.05    9 November 2007
+        * add method to get default available field names in make_query()
+        * allow for explicit _offset param as well as individual _sort and _dir params
+
+0.06    12 Nov 2007
+        * RDBO Debug var set if CATALYST_DEBUG env var is true -- moved to Xsetup() so it actually works.
+
+0.07    20 Nov 2007
+        * auto-discovery of PK to set a real column for default ORDER BY sorting in make_query()
+
+0.08    20 Dec 2007
+        * factor out sql generation into core CatalystX::CRUD::Model::Utils.
+
+0.09    04 Dec 2007
+        * add treat_like_int support
+
+0.10    29 Jan 2008
+        * made RDBO debugging depedent on CATALYST_DEBUG > 1
+
+0.11    06 Feb 2008
+        * fix bug with calculating treat_like_int(). Only set in hash if matches.
+
