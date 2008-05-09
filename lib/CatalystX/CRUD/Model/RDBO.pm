@@ -5,7 +5,7 @@ use base qw( CatalystX::CRUD::Model CatalystX::CRUD::Model::Utils );
 use CatalystX::CRUD::Iterator;
 use Class::C3;
 
-our $VERSION = '0.11';
+our $VERSION = '0.12';
 
 __PACKAGE__->mk_ro_accessors(qw( name manager treat_like_int ));
 __PACKAGE__->config->{object_class} = 'CatalystX::CRUD::Object::RDBO';
@@ -104,6 +104,7 @@ sub Xsetup {
     if ( $ENV{CATALYST_DEBUG} && $ENV{CATALYST_DEBUG} > 1 ) {
         $Rose::DB::Object::QueryBuilder::Debug = 1;
         $Rose::DB::Object::Debug               = 1;
+        $Rose::DB::Object::Manager::Debug      = 1;
     }
 
 }
@@ -288,7 +289,7 @@ sub _treat_like_int {
     # treat wildcard timestamps like ints not text (>= instead of ILIKE)
     for my $name (@$col_names) {
         my $col = $self->name->meta->column($name);
-        if ( $col->type =~ m/date|time/ ) {
+        if ( $col->type =~ m/date|time|boolean/ ) {
             $self->{treat_like_int}->{$name} = 1;
         }
     }
