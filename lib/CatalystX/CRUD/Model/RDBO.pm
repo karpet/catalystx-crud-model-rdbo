@@ -308,22 +308,41 @@ B<CAUTION:> For many-to-many relationships only.
 sub _get_rel_meta {
     my ( $self, $obj, $rel_name ) = @_;
 
-    my $rel = $obj->meta->relationship($rel_name)
+    my $rel = $self->has_relationship( $obj, $rel_name )
         or $self->throw_error("no such relationship $rel_name");
 
-    my $map_class = $rel->map_class;
-    my $mcm       = $map_class->meta;
-    my @map_to    = $mcm->relationship( $rel->map_to )->column_map;
-    my @map_from  = $mcm->relationship( $rel->map_from )->column_map;
-    my %m         = (
-        map_to    => \@map_to,
-        map_from  => \@map_from,
-        map_class => $map_class,
-    );
+    if ( $rel->isa('Rose::DB::Object::Metadata::Relationship::ManyToMany') ) {
 
-    #carp dump \%m;
+        my $map_class = $rel->map_class;
+        my $mcm       = $map_class->meta;
+        my @map_to    = $mcm->relationship( $rel->map_to )->column_map;
+        my @map_from  = $mcm->relationship( $rel->map_from )->column_map;
+        my %m         = (
+            map_to    => \@map_to,
+            map_from  => \@map_from,
+            map_class => $map_class,
+        );
 
-    return \%m;
+        #carp dump \%m;
+
+        return \%m;
+
+    }
+    else {
+        $self->throw_error( "unsupport relationship type: " . ref($rel) );
+    }
+}
+
+=head2 has_relationship( I<obj>, I<rel_name> )
+
+Returns the Rose::DB::Object::Metadata::Relationship instance
+for I<rel_name> if it exists, or undef if it does not.
+
+=cut
+
+sub has_relationship {
+    my ( $self, $obj, $rel_name ) = @_;
+    return $obj->meta->relationship($rel_name);
 }
 
 sub add_related {
