@@ -348,8 +348,9 @@ sub has_relationship {
 sub add_related {
     my ( $self, $obj, $rel_name, $fk_val ) = @_;
     my $addmethod = 'add_' . $rel_name;
-    my $meta = $self->_get_rel_meta( $obj, $rel_name );
-    $obj->$addmethod( { $meta->{map_to}->[1] => $fk_val } );
+    my $meta      = $self->_get_rel_meta( $obj, $rel_name );
+    my $fpk       = $meta->{map_to}->[1];
+    $obj->$addmethod( { $fpk => $fk_val } );
     $obj->save;
 }
 
