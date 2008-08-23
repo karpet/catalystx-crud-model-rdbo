@@ -24,20 +24,20 @@ ok( $res = request('/foo/1/read'), "get /foo/1/read" );
 
 is( $res->headers->{status}, 200, "get 200" );
 
-ok( $res = request('/foo/1/related/bars/2/add'),
-    "GET /foo/1/related/bars/2/add" );
+ok( $res = request('/foo/1/bars/2/add'),
+    "GET /foo/1/bars/2/add" );
 
-is( $res->headers->{status}, 500, "cannot GET add related" );
+is( $res->headers->{status}, 400, "cannot GET add related" );
 
 # add a new foobar
-ok( $res = request( POST( '/foo/1/related/bars/2/add', [] ) ),
-    "POST /foo/1/related/bars/2/add" );
+ok( $res = request( POST( '/foo/1/bars/2/add', [] ) ),
+    "POST /foo/1/bars/2/add" );
 
-is( $res->headers->{status}, 200, "POST add related OK" );
+is( $res->headers->{status}, 204, "POST add related OK" );
 
 # remove an old foobar
-ok( $res = request( POST( '/foo/1/related/bars/1/remove', [] ) ),
-    "POST /foo/1/related/bars/1/remove" );
+ok( $res = request( POST( '/foo/1/bars/1/remove', [] ) ),
+    "POST /foo/1/bars/1/remove" );
 
-is( $res->headers->{status}, 200, "POST remove related OK" );
+is( $res->headers->{status}, 204, "POST remove related OK" );
 

@@ -13,7 +13,7 @@ WriteMakefile(
         'Data::Dump' => 0,   # for testing
         'Rose::DB::Object' => 0,
         'Rose::DBx::Object::MoreHelpers' => 0,
-        'CatalystX::CRUD'  => 0.18,
+        'CatalystX::CRUD'  => 0.29,
         'Catalyst::Runtime' => 0,
         'Rose::DBx::TestDB' => 0,
 
