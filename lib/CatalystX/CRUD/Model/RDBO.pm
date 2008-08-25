@@ -7,7 +7,7 @@ use Class::C3;
 use Carp;
 use Data::Dump qw( dump );
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 __PACKAGE__->mk_ro_accessors(qw( name manager treat_like_int ));
 __PACKAGE__->config( object_class => 'CatalystX::CRUD::Object::RDBO' );
@@ -352,6 +352,9 @@ sub add_related {
     my $fpk       = $meta->{map_to}->[1];
     $obj->$addmethod( { $fpk => $fk_val } );
     $obj->save;
+    
+    # so next access reflects change.
+    $obj->forget_related($rel_name);
 }
 
 sub rm_related {
@@ -371,6 +374,8 @@ sub rm_related {
         object_class => $meta->{map_class},
         where        => $query,
     );
+    
+    # so next access reflects change
     $obj->forget_related($rel_name);
     return $obj;
 }
