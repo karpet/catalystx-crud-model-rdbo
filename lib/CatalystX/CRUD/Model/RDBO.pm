@@ -7,7 +7,7 @@ use Class::C3;
 use Carp;
 use Data::Dump qw( dump );
 
-our $VERSION = '0.14';
+our $VERSION = '0.15';
 
 __PACKAGE__->mk_ro_accessors(qw( name manager treat_like_int ));
 __PACKAGE__->config( object_class => 'CatalystX::CRUD::Object::RDBO' );
@@ -429,9 +429,18 @@ sub make_query {
     my $field_names = shift || $self->_get_field_names;
     my $q           = $self->make_sql_query($field_names);
 
-    # dis-ambiguate common column names
-    $q->{sort_by} =~ s,\bname\ ,t1.name ,;
-    $q->{sort_by} =~ s,\bid\ ,t1.id ,;
+    # many2many relationships always have two tables,
+    # and we are sorting my the 2nd one. The 1st one is the mapper.
+    if ( $c->req->params->{_m2m} ) {
+        unless ( $q->{sort_by} =~ m/t\d\./ ) {
+            $q->{sort_by} = join( '.', 't2', $q->{sort_by} );
+        }
+    }
+    else {
+        unless ( $q->{sort_by} =~ m/t\d\./ ) {
+            $q->{sort_by} = join( '.', 't1', $q->{sort_by} );
+        }
+    }
 
     return $q;
 }

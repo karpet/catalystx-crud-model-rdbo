@@ -48,4 +48,7 @@ Revision history for CatalystX-CRUD-Model-RDBO
 0.14    25 Aug 2008
         * fix add_related() to forget_related() after save, so that next access reflects the addition.
 
+0.15     xxx
+        * move column sort disambiguation from CatalystX::CRUD::YUI::Controller to here.
+
 
