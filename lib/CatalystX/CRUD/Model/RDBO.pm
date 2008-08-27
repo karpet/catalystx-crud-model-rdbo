@@ -7,7 +7,7 @@ use Class::C3;
 use Carp;
 use Data::Dump qw( dump );
 
-our $VERSION = '0.15';
+our $VERSION = '0.14';
 
 __PACKAGE__->mk_ro_accessors(qw( name manager treat_like_int ));
 __PACKAGE__->config( object_class => 'CatalystX::CRUD::Object::RDBO' );
