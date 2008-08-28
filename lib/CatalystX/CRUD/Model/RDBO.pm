@@ -431,7 +431,7 @@ sub make_query {
 
     # many2many relationships always have two tables,
     # and we are sorting my the 2nd one. The 1st one is the mapper.
-    if ( $c->req->params->{cxc-m2m} ) {
+    if ( $c->req->params->{'cxc-m2m'} ) {
         unless ( $q->{sort_by} =~ m/t\d\./ ) {
             $q->{sort_by} = join( '.', 't2', $q->{sort_by} );
         }
