@@ -42,6 +42,9 @@ sub test : Local {
 sub end : Private {
     my ( $self, $c ) = @_;
     $c->log->debug( "resp status = " . $c->res->status ) if $c->debug;
+    if ( $c->stash->{results} ) {
+        $c->res->body( Data::Dump::dump( $c->stash->{results}->query ) );
+    }
     1;
 }
 

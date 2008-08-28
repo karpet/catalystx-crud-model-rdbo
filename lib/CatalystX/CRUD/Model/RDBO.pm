@@ -352,7 +352,7 @@ sub add_related {
     my $fpk       = $meta->{map_to}->[1];
     $obj->$addmethod( { $fpk => $fk_val } );
     $obj->save;
-    
+
     # so next access reflects change.
     $obj->forget_related($rel_name);
 }
@@ -374,7 +374,7 @@ sub rm_related {
         object_class => $meta->{map_class},
         where        => $query,
     );
-    
+
     # so next access reflects change
     $obj->forget_related($rel_name);
     return $obj;
@@ -423,6 +423,13 @@ sub _treat_like_int {
     return $self->{treat_like_int};
 }
 
+sub _join_with_table_prefix {
+    my ( $self, $q, $prefix ) = @_;
+    return join( ' ',
+        map { $prefix . '.' . $_->[0], $_->[1] }
+            map { [%$_] } @{ $q->{sort_order} } );
+}
+
 sub make_query {
     my $self        = shift;
     my $c           = $self->context;
@@ -432,15 +439,17 @@ sub make_query {
     # many2many relationships always have two tables,
     # and we are sorting my the 2nd one. The 1st one is the mapper.
     if ( $c->req->params->{'cxc-m2m'} ) {
-        unless ( $q->{sort_by} =~ m/t\d\./ ) {
-            $q->{sort_by} = join( '.', 't2', $q->{sort_by} );
+        if ( length( $q->{sort_by} ) and !( $q->{sort_by} =~ m/t\d\./ ) ) {
+            $q->{sort_by} = $self->_join_with_table_prefix( $q, 't2' );
         }
     }
     else {
-        unless ( $q->{sort_by} =~ m/t\d\./ ) {
-            $q->{sort_by} = join( '.', 't1', $q->{sort_by} );
+        if ( length( $q->{sort_by} ) and !( $q->{sort_by} =~ m/t\d\./ ) ) {
+            $q->{sort_by} = $self->_join_with_table_prefix( $q, 't1' );
         }
     }
+
+    #carp dump $q;
 
     return $q;
 }
