@@ -48,5 +48,7 @@ Revision history for CatalystX-CRUD-Model-RDBO
 0.14    xxxx
         * fix add_related() to forget_related() after save, so that next access reflects the addition.
         * move column sort disambiguation from CatalystX::CRUD::YUI::Controller to here.
+        * support for 0.30 core api param name change
+        * add 'int' to column types registered as 'treat_like_int'
 
 

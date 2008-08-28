@@ -415,7 +415,7 @@ sub _treat_like_int {
     # treat wildcard timestamps like ints not text (>= instead of ILIKE)
     for my $name (@$col_names) {
         my $col = $self->name->meta->column($name);
-        if ( $col->type =~ m/date|time|boolean/ ) {
+        if ( $col->type =~ m/date|time|boolean|int/ ) {
             $self->{treat_like_int}->{$name} = 1;
         }
     }
@@ -431,7 +431,7 @@ sub make_query {
 
     # many2many relationships always have two tables,
     # and we are sorting my the 2nd one. The 1st one is the mapper.
-    if ( $c->req->params->{_m2m} ) {
+    if ( $c->req->params->{cxc-m2m} ) {
         unless ( $q->{sort_by} =~ m/t\d\./ ) {
             $q->{sort_by} = join( '.', 't2', $q->{sort_by} );
         }
