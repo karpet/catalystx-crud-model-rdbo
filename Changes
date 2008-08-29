@@ -50,5 +50,6 @@ Revision history for CatalystX-CRUD-Model-RDBO
         * move column sort disambiguation from CatalystX::CRUD::YUI::Controller to here.
         * support for 0.30 core api param name change
         * add 'int' to column types registered as 'treat_like_int'
+        * fix query for _related methods.
 
 

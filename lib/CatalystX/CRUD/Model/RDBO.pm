@@ -272,21 +272,33 @@ Like search_related() but returns an integer.
 
 =cut
 
+sub _related_query {
+    my ($self) = @_;
+    my $query = $self->make_query;
+    my @arg;
+    for (qw( limit offset sort_by )) {
+        if ( exists $query->{$_} and length $query->{$_} ) {
+            push( @arg, $_ => $query->{$_} );
+        }
+    }
+    return @arg;
+}
+
 sub search_related {
     my ( $self, $obj, $rel ) = @_;
-    return $obj->$rel;
+    return $obj->$rel( $self->_related_query );
 }
 
 sub iterator_related {
     my ( $self, $obj, $rel ) = @_;
     my $method = $rel . '_iterator';
-    return $obj->$method;
+    return $obj->$method( $self->_related_query );
 }
 
 sub count_related {
     my ( $self, $obj, $rel ) = @_;
     my $method = $rel . '_count';
-    return $obj->$method;
+    return $obj->$method( $self->_related_query );
 }
 
 =head2 add_related( I<obj>, I<rel_name>, I<foreign_value> )
