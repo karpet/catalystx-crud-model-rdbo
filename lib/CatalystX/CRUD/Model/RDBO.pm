@@ -273,7 +273,17 @@ Like search_related() but returns an integer.
 =cut
 
 sub _related_query {
-    my ($self) = @_;
+    my ( $self, $obj, $rel_name ) = @_;
+    my $relationship = $self->has_relationship( $obj, $rel_name )
+        or $self->throw_error("no relationship for $rel_name");
+
+    # set the param so sort is correctly mangled in make_query()
+    if ($relationship->isa(
+            'Rose::DB::Object::Metadata::Relationship::ManyToMany')
+        )
+    {
+        $self->context->req->params->{'cxc-m2m'} = 1;
+    }
     my $query = $self->make_query;
     my @arg;
     for (qw( limit offset sort_by )) {
@@ -286,19 +296,19 @@ sub _related_query {
 
 sub search_related {
     my ( $self, $obj, $rel ) = @_;
-    return $obj->$rel( $self->_related_query );
+    return $obj->$rel( $self->_related_query( $obj, $rel ) );
 }
 
 sub iterator_related {
     my ( $self, $obj, $rel ) = @_;
     my $method = $rel . '_iterator';
-    return $obj->$method( $self->_related_query );
+    return $obj->$method( $self->_related_query( $obj, $rel ) );
 }
 
 sub count_related {
     my ( $self, $obj, $rel ) = @_;
     my $method = $rel . '_count';
-    return $obj->$method( $self->_related_query );
+    return $obj->$method( $self->_related_query( $obj, $rel ) );
 }
 
 =head2 add_related( I<obj>, I<rel_name>, I<foreign_value> )
@@ -461,7 +471,7 @@ sub make_query {
         }
     }
 
-    #carp dump $q;
+    $c->log->debug( 'make_query: ' . dump $q ) if $c->debug;
 
     return $q;
 }
