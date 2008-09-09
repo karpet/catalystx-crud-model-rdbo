@@ -43,6 +43,7 @@ sub end : Private {
     my ( $self, $c ) = @_;
     $c->log->debug( "resp status = " . $c->res->status ) if $c->debug;
     if ( $c->stash->{results} ) {
+        delete $c->stash->{results}->query->{query_obj};
         $c->res->body( Data::Dump::dump( $c->stash->{results}->query ) );
     }
     1;

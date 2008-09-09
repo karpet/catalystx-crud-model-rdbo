@@ -51,5 +51,6 @@ Revision history for CatalystX-CRUD-Model-RDBO
         * support for 0.30 core api param name change
         * add 'int' to column types registered as 'treat_like_int'
         * fix query for _related methods.
+        * update tests to support new make_sql_query() format in core API
 
 
