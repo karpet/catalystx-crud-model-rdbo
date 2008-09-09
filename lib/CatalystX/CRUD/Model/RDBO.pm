@@ -471,7 +471,8 @@ sub make_query {
         }
     }
 
-    $c->log->debug( 'make_query: ' . dump $q ) if $c->debug;
+    $c->log->debug("make_query: WHERE $q->{query_obj} ORDER BY $q->{sort_by}")
+        if $c->debug;
 
     return $q;
 }

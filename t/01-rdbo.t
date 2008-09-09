@@ -1,7 +1,6 @@
 use Test::More tests => 20;
 
 BEGIN {
-    $ENV{CATALYST_DEBUG} = $ENV{PERL_DEBUG} || 0;
     use lib qw( ../../CatalystX-CRUD/trunk/lib );
     use_ok('CatalystX::CRUD::Model::RDBO');
     use_ok('CatalystX::CRUD::Object::RDBO');
