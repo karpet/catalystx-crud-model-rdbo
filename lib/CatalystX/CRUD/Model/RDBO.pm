@@ -3,11 +3,12 @@ use strict;
 use warnings;
 use base qw( CatalystX::CRUD::Model CatalystX::CRUD::Model::Utils );
 use CatalystX::CRUD::Iterator;
-use Class::C3;
+use MRO::Compat;
+use mro 'c3';
 use Carp;
 use Data::Dump qw( dump );
 
-our $VERSION = '0.19';
+our $VERSION = '0.20';
 
 __PACKAGE__->mk_ro_accessors(
     qw( name manager treat_like_int load_with related_load_with ));

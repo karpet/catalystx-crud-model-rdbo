@@ -69,3 +69,6 @@ Revision history for CatalystX-CRUD-Model-RDBO
 0.19    12 Dec 2008
         * fix long-standing issue with passing additional args to load() via CXC::Object::RDBO->read
 
+0.20    xxx
+        * switch to MRO::Compat from Class::C3
+
