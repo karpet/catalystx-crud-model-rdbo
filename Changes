@@ -71,4 +71,5 @@ Revision history for CatalystX-CRUD-Model-RDBO
 
 0.20    xxx
         * switch to MRO::Compat from Class::C3
+        * fixes for CatalystX::CRUD 0.43
 

@@ -393,7 +393,7 @@ for I<rel_name> if it exists, or undef if it does not.
 
 sub has_relationship {
     my ( $self, $obj, $rel_name ) = @_;
-    return $obj->meta->relationship($rel_name);
+    return $obj->delegate->meta->relationship($rel_name);
 }
 
 sub add_related {
@@ -413,7 +413,7 @@ sub rm_related {
 
     my $meta = $self->_get_rel_meta( $obj, $rel_name );
     my $obj_method
-        = $obj->meta->column_accessor_method_name( $meta->{map_from}->[1] );
+        = $obj->delegate->meta->column_accessor_method_name( $meta->{map_from}->[1] );
     my $query = [
         $meta->{map_from}->[0] => $obj->$obj_method,
         $meta->{map_to}->[0]   => $fk_val,
