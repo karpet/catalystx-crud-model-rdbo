@@ -354,7 +354,9 @@ sub find_related {
     my $method = 'find_' . $rel;
     my $meta   = $self->_get_rel_meta( $obj, $rel );
     my $fpk    = $meta->{map_to}->[1];
-    return $obj->$method( [ $fpk => $foreign_pk_value ] );
+    my $args   = [ $fpk => $foreign_pk_value ];
+    my $r      = $obj->$method( query => $args );
+    return $r;
 }
 
 =head2 add_related( I<obj>, I<rel_name>, I<foreign_value> )
@@ -396,6 +398,15 @@ sub _get_rel_meta {
         return \%m;
 
     }
+    elsif ( $rel->isa('Rose::DB::Object::Metadata::Relationship::OneToMany') )
+    {
+        my $column_map = $rel->column_map;
+        my %m          = (
+            map_to => [ reverse %$column_map ],    # yes, coerce into array
+        );
+        return \%m;
+
+    }
     else {
         $self->throw_error( "unsupport relationship type: " . ref($rel) );
     }
@@ -410,7 +421,7 @@ for I<rel_name> if it exists, or undef if it does not.
 
 sub has_relationship {
     my ( $self, $obj, $rel_name ) = @_;
-    if (!$obj) {
+    if ( !$obj ) {
         $self->throw_error("obj not defined");
     }
     return $obj->delegate->meta->relationship($rel_name);
