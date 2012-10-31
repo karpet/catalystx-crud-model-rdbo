@@ -410,6 +410,9 @@ for I<rel_name> if it exists, or undef if it does not.
 
 sub has_relationship {
     my ( $self, $obj, $rel_name ) = @_;
+    if (!$obj) {
+        $self->throw_error("obj not defined");
+    }
     return $obj->delegate->meta->relationship($rel_name);
 }
 
