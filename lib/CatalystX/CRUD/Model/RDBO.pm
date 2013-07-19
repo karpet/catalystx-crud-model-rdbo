@@ -531,7 +531,7 @@ sub make_query {
     my $q           = $self->make_sql_query($field_names);
 
     # many2many relationships always have two tables,
-    # and we are sorting my the 2nd one. The 1st one is the mapper.
+    # and we are sorting by the 2nd one. The 1st one is the mapper.
     # however, we leave sort_by alone if it already has . in it,
     # since then we assume the request knew enough to ask.
     if ( length( $q->{sort_by} ) && !( $q->{sort_by} =~ m/\./ ) ) {
