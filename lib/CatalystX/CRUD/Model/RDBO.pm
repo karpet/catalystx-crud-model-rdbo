@@ -304,7 +304,7 @@ sub _related_query {
     if ( @{ $query->{query} } ) {
         @arg = ( query => $query->{query} );
     }
-    for (qw( limit offset sort_by )) {
+    for (qw( limit offset )) {
         if ( exists $query->{$_} and length $query->{$_} ) {
             push( @arg, $_ => $query->{$_} );
         }
