@@ -1,5 +1,8 @@
 Revision history for CatalystX-CRUD-Model-RDBO
 
+0.30 28 Feb 2014
+ - support for CXC 0.56
+
 0.29 07 Oct 2013
  - re-enable sort of related objects as long as they are o2m not m2m
 
