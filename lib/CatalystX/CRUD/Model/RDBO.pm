@@ -552,6 +552,7 @@ sub make_query {
 
     $c->log->debug("make_query: WHERE $q->{query_obj} ORDER BY $q->{sort_by}")
         if $c->debug;
+    $c->log->debug( "query: " . dump $q ) if $c->debug;
 
     return $q;
 }
@@ -563,6 +564,8 @@ sub _get_objects {
     my $manager = $self->manager;
     my $name    = $self->name;
     my @params  = ( object_class => $name );    # not $self->object_class
+
+    #carp dump \@args;
 
     if ( ref $args[0] eq 'HASH' ) {
         push( @params, %{ $args[0] } );
