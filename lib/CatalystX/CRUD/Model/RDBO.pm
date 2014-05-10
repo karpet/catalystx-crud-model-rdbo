@@ -289,6 +289,7 @@ Like search_related() but returns an integer.
 
 sub _related_query {
     my ( $self, $obj, $rel_name ) = @_;
+    my $c = $self->context;
     my $relationship = $self->has_relationship( $obj, $rel_name )
         or $self->throw_error("no relationship for $rel_name");
 
@@ -297,7 +298,7 @@ sub _related_query {
             'Rose::DB::Object::Metadata::Relationship::ManyToMany')
         )
     {
-        $self->context->req->params->{'cxc-m2m'} = 1;
+        $c->req->params->{'cxc-m2m'} = 1;
     }
     my $query = $self->make_query;
     my @arg;
@@ -309,15 +310,16 @@ sub _related_query {
         # only want to include the sort_by if it makes sense.
         if ( $_ eq 'sort_by' ) {
 
-            # can't reliably predict table prefixes in a m2m
-            if ( $self->context->req->params->{'cxc-m2m'} ) {
+            # can't reliably predict table prefixes in a m2m.
+            # NOTE this effectively ignores whatever make_query did.
+            if ( $c->req->params->{'cxc-m2m'} ) {
                 next;
             }
 
             # if sort_by was derived from PK, it may refer to a parent table,
             # not the related table. So skip it unless it was explicit.
-            if (    !$self->context->req->params->{'cxc-order'}
-                and !$self->context->req->params->{'cxc-sort'} )
+            if (    !$c->req->params->{'cxc-order'}
+                and !$c->req->params->{'cxc-sort'} )
             {
                 next;
             }
@@ -337,7 +339,8 @@ sub _related_query {
         );
     }
 
-    #warn dump \@arg;
+    $c->log->debug( "related_query: " . dump \@arg ) if $c->debug;
+
     return @arg;
 }
 
