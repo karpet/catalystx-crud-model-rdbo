@@ -8,7 +8,7 @@ use mro 'c3';
 use Carp;
 use Data::Dump qw( dump );
 
-our $VERSION = '0.30';
+our $VERSION = '0.301';
 
 __PACKAGE__->mk_ro_accessors(
     qw( name manager treat_like_int load_with related_load_with ));
@@ -305,9 +305,24 @@ sub _related_query {
         @arg = ( query => $query->{query} );
     }
     for (qw( limit offset sort_by )) {
-        if ( $self->context->req->params->{'cxc-m2m'} and $_ eq 'sort_by' ) {
-            next;
+
+        # only want to include the sort_by if it makes sense.
+        if ( $_ eq 'sort_by' ) {
+
+            # can't reliably predict table prefixes in a m2m
+            if ( $self->context->req->params->{'cxc-m2m'} ) {
+                next;
+            }
+
+            # if sort_by was derived from PK, it may refer to a parent table,
+            # not the related table. So skip it unless it was explicit.
+            if (    !$self->context->req->params->{'cxc-order'}
+                and !$self->context->req->params->{'cxc-sort'} )
+            {
+                next;
+            }
         }
+
         if ( exists $query->{$_} and length $query->{$_} ) {
             push( @arg, $_ => $query->{$_} );
         }
